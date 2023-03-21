@@ -1,17 +1,17 @@
 package model;
 
 public class Department {
-    private String id;
+    private long id;
     private String name;
     private String email;
     private String phone;
     private String address;
-    private String managerID;
+    private long managerID;
 
     public Department() {
     }
 
-    public Department(String id, String name, String email, String phone, String address, String managerID) {
+    public Department(long id, String name, String email, String phone, String address, long managerID) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -20,11 +20,11 @@ public class Department {
         this.managerID = managerID;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -60,11 +60,11 @@ public class Department {
         this.address = address;
     }
 
-    public String getManagerID() {
+    public long getManagerID() {
         return managerID;
     }
 
-    public void setManagerID(String managerID) {
+    public void setManagerID(long managerID) {
         this.managerID = managerID;
     }
 
@@ -78,5 +78,8 @@ public class Department {
                 ", address=" + address +
                 ", managerID=" + managerID +
                 ']';
+    }
+
+    public void setManagerID(Long aLong) {
     }
 }

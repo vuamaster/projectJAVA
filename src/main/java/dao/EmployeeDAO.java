@@ -12,7 +12,7 @@ import java.util.List;
 
 public class EmployeeDAO {
     public List<Employee> getAll(){
-        final String sql = "SELECT * FROM employees";
+        final String sql = "SELECT * FROM employees WHERE `status` = 1";
         List<Employee> employeeList = new ArrayList<>();
         try {
             Connection conn = MyConnection.getConnection();
@@ -20,7 +20,7 @@ public class EmployeeDAO {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()){
                 Employee e = new Employee();
-                e.setId(rs.getString("employee_id"));
+                e.setId(rs.getLong("employee_id"));
                 e.setFullName(rs.getString("fullname"));
                 e.setEmail(rs.getString("email"));
                 e.setPhone(rs.getString("phone"));
@@ -30,7 +30,7 @@ public class EmployeeDAO {
                 e.setGender(rs.getInt("gender"));
                 e.setSalary(rs.getInt("salary"));
                 e.setPostion(rs.getString("postion"));
-                e.setDepartmentID(rs.getString("department_id"));
+                e.setDepartmentID(rs.getLong("department_id"));
                 e.setStatus(rs.getInt("status"));
                 employeeList.add(e);
             }
@@ -43,8 +43,8 @@ public class EmployeeDAO {
         }
         return employeeList;
     }
-    public Employee getBuyID(String id){
-        final String sql ="SELECT * FROM `employees` where `employee_id` ="+"'"+id+"'";
+    public Employee getBuyID(long id){
+        final String sql ="SELECT * FROM `employees` where `employee_id` ="+id;
         Employee e = null;
         try {
             Connection conn = MyConnection.getConnection();
@@ -52,7 +52,7 @@ public class EmployeeDAO {
             ResultSet rs = stmt.executeQuery(sql);
             if(rs.next()){
                 e = new Employee();
-                e.setId(rs.getString("employee_id"));
+                e.setId(rs.getLong("employee_id"));
                 e.setFullName(rs.getString("fullname"));
                 e.setEmail(rs.getString("email"));
                 e.setPhone(rs.getString("phone"));
@@ -62,7 +62,7 @@ public class EmployeeDAO {
                 e.setGender(rs.getInt("gender"));
                 e.setSalary(rs.getInt("salary"));
                 e.setPostion(rs.getString("postion"));
-                e.setDepartmentID(rs.getString("department_id"));
+                e.setDepartmentID(rs.getLong("department_id"));
                 e.setStatus(rs.getInt("status"));
             }
             rs.close();
@@ -75,9 +75,74 @@ public class EmployeeDAO {
         }
         return e;
     }
+    public Employee getBuyPhone(String phone){
+        final String sql ="SELECT * FROM `employees` where `employee_id` ="+phone;
+        Employee e = null;
+        try {
+            Connection conn = MyConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                e = new Employee();
+                e.setId(rs.getLong("employee_id"));
+                e.setFullName(rs.getString("fullname"));
+                e.setEmail(rs.getString("email"));
+                e.setPhone(rs.getString("phone"));
+                e.setAddress(rs.getString("address"));
+                e.setHireDate(rs.getString("hire_date"));
+                e.setBirthDay(rs.getString("birth_day"));
+                e.setGender(rs.getInt("gender"));
+                e.setSalary(rs.getInt("salary"));
+                e.setPostion(rs.getString("postion"));
+                e.setDepartmentID(rs.getLong("department_id"));
+                e.setStatus(rs.getInt("status"));
+            }
+            rs.close();
+            conn.close();
+            stmt.close();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return e;
+    }
+    public List<Employee> getBuyName(String name){
+        final String sql ="SELECT * FROM `employees` WHERE `fullname` like "+"'%"+name+"'";
+        List<Employee> employeeList = new ArrayList<>();
+        try {
+            Connection conn = MyConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if(rs.next()){
+                Employee e = new Employee();
+                e.setId(rs.getLong("employee_id"));
+                e.setFullName(rs.getString("fullname"));
+                e.setEmail(rs.getString("email"));
+                e.setPhone(rs.getString("phone"));
+                e.setAddress(rs.getString("address"));
+                e.setHireDate(rs.getString("hire_date"));
+                e.setBirthDay(rs.getString("birth_day"));
+                e.setGender(rs.getInt("gender"));
+                e.setSalary(rs.getInt("salary"));
+                e.setPostion(rs.getString("postion"));
+                e.setDepartmentID(rs.getLong("department_id"));
+                e.setStatus(rs.getInt("status"));
+                employeeList.add(e);
+            }
+            rs.close();
+            conn.close();
+            stmt.close();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return employeeList;
+    }
     public void insert(Employee e){
-        final  String sql =String.format("INSERT INTO `projectjava`.`employees` (`employee_id`, `fulltname`, `email`, `phone`, `address`, `hire_date`, `birth_day`, `gender`, `salary`, `postion`, `department_id`, `satus`) VALUES ('1', '%s', '%s', '%s', '%s', '%s', '%s', '1', '1', '%s', '%s', '1')",
-                e.getId(),e.getFullName(),e.getEmail(),e.getPhone(),e.getAddress(),e.getHireDate(),e.getBirthDay(),e.getGender(),e.getSalary(),e.getPostion(),e.getDepartmentID(),e.getStatus()
+        final  String sql =String.format("INSERT INTO `projectjava`.`employees` ( `fulltname`, `email`, `phone`, `address`, `hire_date`, `birth_day`, `gender`, `salary`, `postion`, `department_id`, `satus`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%d')",
+                e.getFullName(),e.getEmail(),e.getPhone(),e.getAddress(),e.getHireDate(),e.getBirthDay(),e.getGender(),e.getSalary(),e.getPostion(),e.getDepartmentID(),e.getStatus()
         );
         try {
             Connection conn = MyConnection.getConnection();
@@ -93,12 +158,12 @@ public class EmployeeDAO {
             ex.printStackTrace();
         }
     }
-    public void update(Employee e, String id) {
+    public void update(Employee e, long id) {
         Employee tmp = getBuyID(id);
         if (tmp == null) {
             throw new RuntimeException("phòng ban không tồn tại!");
         }
-        final String sql = String.format("UPDATE `projectjava`.`employees` SET `fulltname` = '%s', `email` = '%s', `phone` = '%s', `address` = '%s', `hire_date` = '%s', `birth_day` = '%s', `gender` = '%d', `salary` = '%d', `postion` = '%s', `department_id` = '%s', `status` = '%d' WHERE (`employee_id` = '%s')",
+        final String sql = String.format("UPDATE `projectjava`.`employees` SET `fulltname` = '%s', `email` = '%s', `phone` = '%s', `address` = '%s', `hire_date` = '%s', `birth_day` = '%s', `gender` = '%d', `salary` = '%d', `postion` = '%s', `department_id` = '%d', `status` = '%d' WHERE (`employee_id` = '%d')",
                 e.getFullName(),e.getEmail(),e.getPhone(),e.getAddress(),e.getHireDate(),e.getBirthDay(),e.getGender(),e.getSalary(),e.getPostion(),e.getDepartmentID(),e.getStatus(), id
         );
         System.out.println(sql);
@@ -115,12 +180,12 @@ public class EmployeeDAO {
             ex.printStackTrace();
         }
     }
-    public void delete(String id){
+    public void delete(long id){
         Employee e = getBuyID(id);
         if (e == null){
             throw new RuntimeException("phòng ban không tồn tại!");
         }
-        final String sql = "DELETE FROM `employees` WHERE `id` = "+"'"+id+"'";
+        final String sql = "DELETE FROM `employees` WHERE `id` = "+id;
         System.out.println(sql);
         try {
             Connection conn = MyConnection.getConnection();

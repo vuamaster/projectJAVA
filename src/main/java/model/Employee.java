@@ -1,7 +1,7 @@
 package model;
 
 public class Employee {
-    private String id;
+    private long id;
     private String fullName;
     private String email;
     private String phone;
@@ -11,13 +11,13 @@ public class Employee {
     private String hireDate;
     private String postion;
     private int salary;
-    private String departmentID;
+    private long departmentID;
     private int status;
 
     public Employee() {
     }
 
-    public Employee(String id, String fullName, String email, String phone, String address, int gender, String birthDay, String hireDate, String postion, int salary, String departmentID, int status) {
+    public Employee(long id, String fullName, String email, String phone, String address, int gender, String birthDay, String hireDate, String postion, int salary, long departmentID, int status) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
@@ -32,11 +32,11 @@ public class Employee {
         this.status = status;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -112,11 +112,11 @@ public class Employee {
         this.salary = salary;
     }
 
-    public String getDepartmentID() {
+    public long getDepartmentID() {
         return departmentID;
     }
 
-    public void setDepartmentID(String departmentID) {
+    public void setDepartmentID(long departmentID) {
         this.departmentID = departmentID;
     }
 
