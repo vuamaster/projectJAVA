@@ -90,13 +90,13 @@ public class DepartmentDAO {
         return d;
     }
     public List<Department> getBuyName(String name){
-        final String sql ="SELECT * FROM departments where `dept_name` like "+"'%"+name+"'";
+        final String sql ="SELECT * FROM departments where `dept_name` like "+"'%"+name+"%'";
         List<Department> departmentList = new ArrayList<>();
         try {
             Connection conn = MyConnection.getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            if(rs.next()){
+            while (rs.next()){
                 Department d = new Department();
                 d.setId((rs.getLong("dept_id")));
                 d.setName(rs.getString("dept_name"));
@@ -141,10 +141,31 @@ public class DepartmentDAO {
         if (tmp == null) {
             throw new RuntimeException("phòng ban không tồn tại!");
         }
-        final String sql = String.format("UPDATE `projectjava`.`departments` SET `dept_name` = '%s', `email` = '%s', `phone` = '%s', `address` = '%s',`manager_id` = '%d' WHERE (`dept_id` = '%d')",
-                d.getName(), d.getEmail(), d.getPhone(), d.getAddress(), d.getManagerID(), id
+        final String sql = String.format("UPDATE `projectjava`.`departments` SET `dept_name` = '%s', `email` = '%s', `phone` = '%s', `address` = '%s' WHERE (`dept_id` = '%d')",
+                d.getName(), d.getEmail(), d.getPhone(), d.getAddress(), id
         );
         System.out.println(sql);
+        try {
+            Connection conn = MyConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            long rs = stmt.executeUpdate(sql);
+            if (rs == 0) {
+                System.out.println("Cập nhật thất bại");
+            }
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void updateManager(Department d, long id){
+        Department tmp = getBuyID(id);
+        if (tmp == null) {
+            throw new RuntimeException("phòng ban không tồn tại!");
+        }
+        final String sql = String.format("UPDATE `projectjava`.`departments` SET `manager_id` = '%d' WHERE (`dept_id` = '%d')",
+                d.getManagerID(), id
+        );
         try {
             Connection conn = MyConnection.getConnection();
             Statement stmt = conn.createStatement();

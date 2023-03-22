@@ -108,7 +108,7 @@ public class EmployeeDAO {
         return e;
     }
     public List<Employee> getBuyName(String name){
-        final String sql ="SELECT * FROM `employees` WHERE `fullname` like "+"'%"+name+"'";
+        final String sql ="SELECT * FROM `employees` WHERE `fullname` like "+"'%"+name+"%'";
         List<Employee> employeeList = new ArrayList<>();
         try {
             Connection conn = MyConnection.getConnection();
@@ -141,7 +141,7 @@ public class EmployeeDAO {
         return employeeList;
     }
     public void insert(Employee e){
-        final  String sql =String.format("INSERT INTO `projectjava`.`employees` ( `fulltname`, `email`, `phone`, `address`, `hire_date`, `birth_day`, `gender`, `salary`, `postion`, `department_id`, `satus`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%d')",
+        final  String sql =String.format("INSERT INTO `projectjava`.`employees` ( `fullname`, `email`, `phone`, `address`, `hire_date`, `birth_day`, `gender`, `salary`, `postion`, `department_id`, `status`) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%d')",
                 e.getFullName(),e.getEmail(),e.getPhone(),e.getAddress(),e.getHireDate(),e.getBirthDay(),e.getGender(),e.getSalary(),e.getPostion(),e.getDepartmentID(),e.getStatus()
         );
         try {
@@ -185,7 +185,7 @@ public class EmployeeDAO {
         if (e == null){
             throw new RuntimeException("phòng ban không tồn tại!");
         }
-        final String sql = "DELETE FROM `employees` WHERE `id` = "+id;
+        final String sql = "DELETE FROM `employees` WHERE `employee_id` = "+id;
         System.out.println(sql);
         try {
             Connection conn = MyConnection.getConnection();
