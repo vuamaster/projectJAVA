@@ -41,4 +41,8 @@ public class Account {
                 ", user='" + user + '\'' +
                 ']';
     }
+
+    public String getPassword() {
+        return password;
+    }
 }

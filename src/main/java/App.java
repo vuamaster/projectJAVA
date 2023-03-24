@@ -1,5 +1,7 @@
+import dao.AccountDAO;
 import dao.DepartmentDAO;
 import dao.EmployeeDAO;
+import model.Account;
 import model.Department;
 import model.Employee;
 import service.AuthenService;
@@ -12,11 +14,32 @@ public class App {
     private static AuthenService authenService = new AuthenService();
     private static EmployeeDAO employeeDAO =new EmployeeDAO();
     private static DepartmentDAO departmentDAO = new DepartmentDAO();
+    private static AccountDAO accountDAO = new AccountDAO();
     private static void mainMenu(){
         System.out.println("------ QUẢN LÝ NHÂN SỰ --------");
         System.out.println("1. Quản lý nhân viên");
         System.out.println("2. Quản lý phòng ban");
-        System.out.println("3. Đăng xuất");
+        System.out.println("3. Quản lí tài khoản");
+        System.out.println("4. Đăng xuất");
+    }
+    private static void mainMenuTaikhoan(){
+        System.out.println("------ QUẢN LÝ TÀI KHOẢN --------");
+        System.out.println("1. Thêm tài khoản mới");
+        System.out.println("2. Xóa tài khoản");
+        System.out.println("3. Quay lại");
+    }
+    private static void themTK(Scanner in){
+        Account a =new Account();
+        System.out.print("\tNhập tên tài khoản: ");
+        a.setUser(in.nextLine());
+        System.out.print("\tNhập mật khẩu: ");
+        a.setPassword(in.nextLine());
+        accountDAO.insert(a);
+    }
+    private static void xoaTK(Scanner in){
+        System.out.print("\tNhập tên tài khoản cần xóa: ");
+        String username = in.nextLine();
+        accountDAO.delete(username);
     }
     private static void mainMenuNhanvien(){
         System.out.println("------ QUẢN LÝ NHÂN VIÊN --------");
@@ -42,25 +65,25 @@ public class App {
     }
     private static void themNV(Scanner in){
         Employee e = new Employee();
-        System.out.print("Nhập tên NV: ");
+        System.out.print("\tNhập tên NV: ");
         e.setFullName(in.nextLine());
-        System.out.print("Nhập email: ");
+        System.out.print("\tNhập email: ");
         e.setEmail(in.nextLine());
-        System.out.print("Nhập SĐT: ");
+        System.out.print("\tNhập SĐT: ");
         e.setPhone(in.nextLine());
-        System.out.print("Nhập địa chỉ: ");
+        System.out.print("\tNhập địa chỉ: ");
         e.setAddress(in.nextLine());
-        System.out.print("Nhập ngày thuê theo định dạng dd/mm/yyyy: ");
+        System.out.print("\tNhập ngày thuê theo định dạng dd/mm/yyyy: ");
         e.setHireDate(in.nextLine());
-        System.out.print("Nhập ngày sinh theo định dạng dd/mm/yyyy:: ");
+        System.out.print("\tNhập ngày sinh theo định dạng dd/mm/yyyy: ");
         e.setBirthDay(in.nextLine());
-        System.out.print("Nhập giới tính (nam nhập 1, nữ nhập 0): ");
+        System.out.print("\tNhập giới tính (nam nhập 1, nữ nhập 0): ");
         e.setGender(Integer.parseInt(in.nextLine()));
-        System.out.print("Nhập lương : ");
+        System.out.print("\tNhập lương : ");
         e.setSalary(Integer.parseInt(in.nextLine()));
-        System.out.print("Nhập chức vụ: ");
+        System.out.print("\tNhập chức vụ: ");
         e.setPostion(in.nextLine());
-        System.out.print("Phòng ban: \n");
+        System.out.print("\tPhòng ban: \n");
         List<Department> departmentList = departmentDAO.getAll();
         for (int i = 0; i < departmentList.size(); i++) {
             System.out.printf("\t\t%-5d %-20s \n", i+1, departmentList.get(i).getName());
@@ -83,19 +106,114 @@ public class App {
         }
         employeeDAO.delete(id);
     }
-    private static void suaNVMenu(){
-        System.out.println("------ SỬA THÔNG TIN NHÂN VIÊN --------");
-        System.out.println("\t\t1. Thay đổi thông tin cơ bản");
-        System.out.println("\t\t2. Thay đổi chức vụ");
-        System.out.println("\t\t3. Thay đổi trạng thái");
-        System.out.println("\t\t4. Quay lại");
+    private static void suaTTcoBan(Scanner in){
+        System.out.print("\tNhập ID nhân viên cần sửa : ");
+        long id = Integer.parseInt(in.nextLine());
+        Employee e = new Employee();
+        System.out.print("\tNhập tên NV: ");
+        e.setFullName(in.nextLine());
+        System.out.print("\tNhập email: ");
+        e.setEmail(in.nextLine());
+        System.out.print("\tNhập SĐT: ");
+        e.setPhone(in.nextLine());
+        System.out.print("\tNhập địa chỉ: ");
+        e.setAddress(in.nextLine());
+        System.out.print("\tNhập ngày thuê theo định dạng dd/mm/yyyy: ");
+        e.setHireDate(in.nextLine());
+        System.out.print("\tNhập ngày sinh theo định dạng dd/mm/yyyy: ");
+        e.setBirthDay(in.nextLine());
+        System.out.print("\tNhập giới tính (nam nhập 1, nữ nhập 0): ");
+        e.setGender(Integer.parseInt(in.nextLine()));
+        System.out.print("\tNhập lương : ");
+        e.setSalary(Integer.parseInt(in.nextLine()));
+        System.out.print("\tNhập chức vụ: ");
+        e.setPostion(in.nextLine());
+        System.out.print("\tPhòng ban: \n");
+        List<Department> departmentList = departmentDAO.getAll();
+        for (int i = 0; i < departmentList.size(); i++) {
+            System.out.printf("\t\t%-5d %-20s \n", i+1, departmentList.get(i).getName());
+        }
+        // Tam thoi nhap chinh xac
+        System.out.print("\tChọn phòng ban : ");
+        long dept_id =  departmentList.get(Integer.parseInt(in.nextLine()) - 1).getId();
+        e.setDepartmentID(dept_id);
+        System.out.print("\tNhập trạng thái (đã nghỉ việc nhập 0 ,đang làm nhập 1): ");
+        e.setStatus(Integer.parseInt(in.nextLine()));
+        employeeDAO.update(e,id);
+    }
+    private static void suaTTPBNV(Scanner in){
+        System.out.print("\tNhập ID nhân viên cần sửa : ");
+        long id = Integer.parseInt(in.nextLine());
+        Employee e = new Employee();
+        System.out.print("\tPhòng ban: \n\t\t0 xóa phòng ban\n");
+        List<Department> departmentList = departmentDAO.getAll();
+        for (int i = 0; i < departmentList.size(); i++) {
+            System.out.printf("\t\t%-5d %-20s \n", i+1, departmentList.get(i).getName());
+        }
+        // Tam thoi nhap chinh xac
+        System.out.print("\tChọn phòng ban : ");
+        int tmp = Integer.parseInt(in.nextLine());
+        if (tmp == 0){
+            employeeDAO.updatePBNull(id);
+        }else {
+            long dept_id = departmentList.get(tmp - 1).getId();
+            e.setDepartmentID(dept_id);
+            employeeDAO.updatePB(e,id);
+        }
     }
     private static void timNVMenu(){
         System.out.println("------ TÌM KIẾM NHÂN VIÊN --------");
         System.out.println("\t\t1. Tìm theo ID");
         System.out.println("\t\t2. Tìm theo tên ");
         System.out.println("\t\t3. Tìm theo SĐT");
-        System.out.println("\t\t4. Quay lại");
+        System.out.println("\t\t4. Tìm theo email");
+        System.out.println("\t\t5. Quay lại");
+    }
+    private static void timNVtheoID(Scanner in){
+        System.out.print("\tNhập ID Nhân viên cần tìm: ");
+        long id=0;
+        try {
+            id = Long.parseLong(in.nextLine());
+        } catch (Exception ex) {
+            System.out.println("Nhập sai định dạng!");
+        }
+        Employee e =employeeDAO.getBuyID(id);
+        if (e == null){
+            System.out.println("không tìm thấy nhân viên này");
+        } else
+            System.out.println(e);
+    }
+    private static void timNVtheoSdt(Scanner in){
+        System.out.print("\tNhập SĐT của nhân viên cần tìm: ");
+        String sdt = in.nextLine();
+        Employee e = employeeDAO.getBuyPhone(sdt);
+        if(e == null){
+            System.out.println(" không tìm thấy nhân viên này ");
+        }else
+            System.out.println(e);
+    }
+    private static void timNVtheoEmail(Scanner in){
+        System.out.print("\tNhập email của nhân viên cần tìm: ");
+        String sdt = in.nextLine();
+        Employee e = employeeDAO.getBuyEmail(sdt);
+        if(e == null){
+            System.out.println(" không tìm thấy nhân viên này ");
+        }else
+            System.out.println(e);
+    }
+    private static void timNVtheoTen(Scanner in){
+        System.out.print("\tNhập tên nhân viên cần tìm: ");
+        String name = in.nextLine();
+        List<Employee> employeeList = employeeDAO.getBuyName(name);
+        if (employeeList.size() == 0){
+            System.out.println("không tìm thấy nhân viên này");
+        }else {
+            for (int i = 0; i < employeeList.size(); i++) {
+                Employee e = employeeList.get(i);
+                System.out.printf("%-10d %-15s %-20s %-15s %-10s %-15s %-15s %-10d %-15d %-10s %-10d\n",
+                        e.getId(),e.getFullName(),e.getEmail(),e.getPhone(),e.getAddress(),e.getHireDate(),e.getBirthDay(),e.getGender(),e.getSalary(),e.getPostion(),e.getDepartmentID());
+            }
+        }
     }
     private static void mainMenuPhongban(){
         System.out.println("------ QUẢN LÝ PHÒNG BAN --------");
@@ -205,7 +323,6 @@ public class App {
                 Department d2 = departmentList.get(i);
                 System.out.printf("%-20d %-20s %-20s %-20s %-20s %-20d\n", d2.getId(), d2.getName(), d2.getEmail(), d2.getPhone(), d2.getAddress(), d2.getManagerID());
             }
-            ;
         }
     }
     private static void timTheoSDT(Scanner in){
@@ -250,7 +367,7 @@ public class App {
                         System.out.println("Nhập sai định dạng!");
                         continue;
                     }
-                    if (option < 1 || option > 3) {
+                    if (option < 1 || option > 4) {
                         System.out.print("Vui lòng nhập lại : ");
                         continue;
                     }
@@ -286,30 +403,7 @@ public class App {
                                         break;
                                     case 4:
                                         // sửa nv
-                                        int option3 = -1;
-                                        do {
-                                            suaNVMenu();
-                                            System.out.print("Nhập lựa chọn: ");
-                                            try {
-                                                option3 = Integer.parseInt(in.nextLine());
-                                            } catch (Exception ex) {
-                                                System.out.println("Nhập sai định dạng!");
-                                                continue;
-                                            }
-                                            if (option3 < 1 || option3 > 4) {
-                                                System.out.println("Vui lòng nhập lại : ");
-                                                continue;
-                                            }
-                                            switch (option3) {
-                                                case 1:
-                                                    break;
-                                                case 2:
-                                                    break;
-                                                case 3:
-                                                    break;
-                                            }
-                                        }
-                                        while (option3 != 4);
+                                        suaTTcoBan(in);
                                         break;
                                     case 5:
                                         // tìm nv
@@ -323,23 +417,34 @@ public class App {
                                                 System.out.println("Nhập sai định dạng!");
                                                 continue;
                                             }
-                                            if (option4 < 1 || option4 > 4) {
+                                            if (option4 < 1 || option4 > 5) {
                                                 System.out.println("Vui lòng nhập lại : ");
                                                 continue;
                                             }
                                             switch (option4) {
                                                 case 1:
+                                                    // tìm theo ID
+                                                    timNVtheoID(in);
                                                     break;
                                                 case 2:
+                                                    // tìm theo tên
+                                                    timNVtheoTen(in);
                                                     break;
                                                 case 3:
+                                                    // tìm theo SĐT
+                                                    timNVtheoSdt(in);
+                                                    break;
+                                                case 4:
+                                                    //tìm theo email
+                                                    timNVtheoEmail(in);
                                                     break;
                                             }
                                         }
-                                        while (option4 != 4);
+                                        while (option4 != 5);
                                         break;
                                     case 6:
-                                        // cập nhật thông tin nhân viên
+                                        // cập nhật thông tin phòng ban nhân viên
+                                        suaTTPBNV(in);
                                         break;
                                     case 7:
                                         // tính thuế thu nhập cá nhân
@@ -441,10 +546,35 @@ public class App {
                             while (option2 != 6);
                             break;
                         case 3:
+                            int optiontk = -1;
+                            do {
+                                mainMenuTaikhoan();
+                                System.out.print("Nhập lựa chọn: ");
+                                try {
+                                    optiontk = Integer.parseInt(in.nextLine());
+                                } catch (Exception ex) {
+                                    System.out.println("Nhập sai định dạng!");
+                                    continue;
+                                }
+                                if (optiontk < 1 || optiontk > 3) {
+                                    System.out.print("Vui lòng nhập lại : ");
+                                    continue;
+                                }
+                                switch (optiontk) {
+                                    case 1:
+                                        themTK(in);
+                                        break;
+                                    case 2:
+                                        xoaTK(in);
+                                        break;
+                                }
+                            }
+                            while (optiontk != 3);
                             break;
+
                     }
                 }
-                while (option != 3);
+                while (option != 4);
             } else {
                 // Đăng nhập không thành công
                 System.out.println("Sai tài khoản hoặc mật khẩu!");
