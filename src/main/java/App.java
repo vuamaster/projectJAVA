@@ -104,6 +104,7 @@ public class App {
         } catch (Exception ex) {
             System.out.println("Nhập sai định dạng!");
         }
+        departmentDAO.updateManagernull(employeeDAO.getBuyID(id).getDepartmentID());
         employeeDAO.delete(id);
     }
     private static void suaTTcoBan(Scanner in){
@@ -222,7 +223,8 @@ public class App {
         System.out.println("\t3. Xóa một phòng ban");
         System.out.println("\t4. Sửa thông tin phòng ban");
         System.out.println("\t5. Tìm kiếm phòng ban");
-        System.out.println("\t6. Quay lại");
+        System.out.println("\t6. Danh sách nhân viên trong phòng ban");
+        System.out.println("\t7. Quay lại");
     }
     private static void dsPhongBan(){
         List<Department> departmentList = departmentDAO.getAll();
@@ -231,6 +233,24 @@ public class App {
         for (int i = 0; i < departmentList.size(); i++) {
             Department d = departmentList.get(i);
             System.out.printf("%-20d %-20s %-20s %-20s %-20s %-20d\n", d.getId(), d.getName(), d.getEmail(), d.getPhone(), d.getAddress(),d.getManagerID());
+        };
+    }
+    private static void dsNVtrongPB(Scanner in){
+        System.out.print("nhập ID phòng ban cần xem :");
+        long id=0;
+        try {
+            id = Long.parseLong(in.nextLine());
+        } catch (Exception ex) {
+            System.out.println("Nhập sai định dạng!");
+        }
+        List<Employee> employeeList = employeeDAO.getEmployeeinDepartment(id);
+        System.out.printf("%-10s %-15s %-10s %-20s %-10s %-15s %-15s %-10s %-15s %-10s", "Mã NV", "Tên NV","giới tính", "Email", "Số điện thoại", "Ngày thuê",
+                 "lương","mã phòng","tên phòng","mã quản lý");
+        System.out.println();
+        for (int i = 0; i < employeeList.size(); i++) {
+            Employee e = employeeList.get(i);
+            System.out.printf("%-10d %-15s %-10d %-20s %-10s %-15s %-15s %-10d %-15s %-10d \n",
+                    e.getId(),e.getFullName(),e.getGender(),e.getEmail(),e.getPhone(),e.getHireDate(),e.getSalary(),e.getDepartmentID(),e.getDeptname(),e.getManagerID());
         };
     }
     private static  void themPhongBan(Scanner in){
@@ -296,6 +316,7 @@ public class App {
         } catch (Exception ex) {
             System.out.println("Nhập sai định dạng!");
         }
+        employeeDAO.updatePBNull(departmentDAO.getBuyID(id).getManagerID());
         departmentDAO.delete(id);
     }
     private static void timTheoID(Scanner in){
@@ -465,7 +486,7 @@ public class App {
                                     System.out.println("Nhập sai định dạng!");
                                     continue;
                                 }
-                                if (option2 < 1 || option2 > 6) {
+                                if (option2 < 1 || option2 > 7) {
                                     System.out.print("Vui lòng nhập lại : ");
                                     continue;
                                 }
@@ -541,9 +562,12 @@ public class App {
                                         }
                                         while (option6 != 4);
                                         break;
+                                    case 6:
+                                        dsNVtrongPB(in);
+                                        break;
                                 }
                             }
-                            while (option2 != 6);
+                            while (option2 != 7);
                             break;
                         case 3:
                             int optiontk = -1;

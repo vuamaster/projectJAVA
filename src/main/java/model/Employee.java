@@ -145,5 +145,21 @@ public class Employee {
                 ", status=" + status +
                 '}';
     }
+    private long managerID;
+    private String deptname;
+    public void setManagerID(long managerID) {
+        this.managerID = managerID;
+    }
 
+    public long getManagerID() {
+        return managerID;
+    }
+
+    public void setDeptname(String deptname) {
+        this.deptname = deptname;
+    }
+
+    public String getDeptname() {
+        return deptname;
+    }
 }

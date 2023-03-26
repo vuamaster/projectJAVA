@@ -1,7 +1,6 @@
 package dao;
 
 import connection.MyConnection;
-import model.Department;
 import model.Employee;
 
 import java.sql.Connection;
@@ -75,6 +74,43 @@ public class EmployeeDAO {
         }
         return e;
     }
+    public List<Employee> getEmployeeinDepartment(long id) {
+        List<Employee> employeeList = new ArrayList<>();
+        try {
+            Connection conn = MyConnection.getConnection();
+            String sql = "select e.employee_id, e.fullname, e.gender, e.email, e.phone, e.hire_date, e.salary,e.department_id, d.dept_name, d.manager_id " +
+                    " from employees e " +
+                    " inner join departments d " +
+                    " on e.department_id= d.dept_id " +
+                    " where e.status =1  and d.dept_id = '" + id + "'";
+
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                Employee e = new Employee();
+                e.setId(rs.getLong("e.employee_id"));
+                e.setFullName(rs.getString("e.fullname"));
+                e.setGender(rs.getInt("e.gender"));
+                e.setEmail(rs.getString("e.email"));
+                e.setPhone(rs.getString("e.phone"));
+                e.setHireDate(rs.getString("e.hire_date"));
+                e.setSalary(rs.getInt("e.salary"));
+                e.setDepartmentID(rs.getInt("e.department_id"));
+                e.setDeptname(rs.getString("d.dept_name"));
+                e.setManagerID(rs.getLong("d.manager_id"));
+
+                employeeList.add(e);
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return employeeList;
+    }
     public Employee getBuyPhone(String phone){
         final String sql ="SELECT * FROM `employees` where `phone` ="+phone;
         System.out.println(sql);
@@ -109,7 +145,7 @@ public class EmployeeDAO {
         return e;
     }
     public Employee getBuyEmail(String email){
-        final String sql ="SELECT * FROM `employees` where `email` ="+email;
+        final String sql ="SELECT * FROM `employees` where `email` ='"+email+"'";
         System.out.println(sql);
         Employee e = null;
         try {

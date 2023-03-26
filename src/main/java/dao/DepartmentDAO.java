@@ -179,6 +179,27 @@ public class DepartmentDAO {
             e.printStackTrace();
         }
     }
+    public void updateManagernull( long id){
+        Department tmp = getBuyID(id);
+        if (tmp == null) {
+            throw new RuntimeException("phòng ban không tồn tại!");
+        }
+        final String sql = String.format("UPDATE `projectjava`.`departments` SET `manager_id` = null WHERE (`dept_id` = '%d')",
+                 id
+        );
+        try {
+            Connection conn = MyConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            long rs = stmt.executeUpdate(sql);
+            if (rs == 0) {
+                System.out.println("Cập nhật thất bại");
+            }
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public void delete(long id){
         Department d = getBuyID(id);
         if (d == null){
