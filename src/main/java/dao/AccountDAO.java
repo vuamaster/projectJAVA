@@ -7,8 +7,37 @@ import model.Employee;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountDAO {
+    public List<Account> getAll(){
+        List<Account> accountList = new ArrayList<>();
+        try {
+            // Tao ket noi
+            Connection conn = MyConnection.getConnection();
+            // Chuan bi cau lenh, thuc thi
+            String sql = "SELECT * FROM `accounts`";
+            Statement stmt = conn.createStatement();
+
+            // Ket qua
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                Account account = new Account();
+                account.setId(rs.getInt("id"));
+                account.setUser(rs.getString("username"));
+                accountList.add(account);
+            }
+            // Dong tai nguyen
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return accountList;
+    }
     public Account getBuyID(long id){
         Account account = null;
         try {

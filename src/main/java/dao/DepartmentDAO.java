@@ -117,8 +117,8 @@ public class DepartmentDAO {
         return departmentList;
     }
     public void insert(Department d){
-        final  String sql =String.format("INSERT INTO `departments` (`dept_name`, `email`, `phone`, `address`, `manager_id`) VALUES ('%s', '%s', '%s', '%s', '%d')",
-                d.getName(), d.getEmail(),d.getPhone(), d.getAddress(), d.getManagerID()
+        final  String sql =String.format("INSERT INTO `departments` (`dept_name`, `email`, `phone`, `address`) VALUES ('%s', '%s', '%s', '%s')",
+                d.getName(), d.getEmail(),d.getPhone(), d.getAddress()
         );
         try {
             Connection conn = MyConnection.getConnection();

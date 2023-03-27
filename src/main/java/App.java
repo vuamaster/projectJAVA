@@ -30,10 +30,29 @@ public class App {
     }
     private static void themTK(Scanner in){
         Account a =new Account();
+        String userName = "";
+        String passWord = "";
+        List<Account> accountList = accountDAO.getAll();
+        boolean check = false;
+        while (true){
         System.out.print("\tNhập tên tài khoản: ");
-        a.setUser(in.nextLine());
+        userName = in.nextLine();
+        check = false;
+            for (Account a1:accountList) {
+                if (userName.equalsIgnoreCase(a1.getUser())){
+                    System.out.println("tài khoản này đã tồn tại!");
+                    check = true;
+                    break;
+                }
+            }
+            if (!check) break;
+        }
+        if (!check){
         System.out.print("\tNhập mật khẩu: ");
-        a.setPassword(in.nextLine());
+        passWord = in.nextLine();
+        }
+        a.setUser(userName);
+        a.setPassword(passWord);
         accountDAO.insert(a);
     }
     private static void xoaTK(Scanner in){
@@ -62,6 +81,38 @@ public class App {
             System.out.printf("%-10d %-15s %-20s %-15s %-10s %-15s %-15s %-10d %-15d %-10s %-10d\n",
                     e.getId(),e.getFullName(),e.getEmail(),e.getPhone(),e.getAddress(),e.getHireDate(),e.getBirthDay(),e.getGender(),e.getSalary(),e.getPostion(),e.getDepartmentID());
         };
+    }
+    private static void tinhthue(Scanner in){
+        System.out.print("Nhập ID nhân viên cần tính thuế : ");
+        long id = 0;
+        try {
+            id = Long.parseLong(in.nextLine());
+        } catch (Exception ex) {
+            System.out.println("\tNhập sai định dạng!");
+        }
+        int luongHD= employeeDAO.getBuyID(id).getSalary();
+        // tính lương hưởng thực tế
+        double luongTT = luongHD - luongHD*0.08 - luongHD*0.015 - luongHD*0.01 - 11000000;
+        // tinh thuế
+        double tax = 0;
+        if (luongTT <= 5000000 ){
+            tax = luongTT * 0.05;
+        }else if (luongTT <= 10000000){
+            tax = (luongTT * 0.1) - 250000;
+        }else if (luongTT <= 18000000){
+            tax = (luongTT * 0.15) - 750000;
+        }else if (luongTT <= 32000000){
+            tax = (luongTT * 0.2) - 1650000;
+        }else if (luongTT <= 52000000){
+            tax = (luongTT * 0.25) - 3250000;
+        }else if (luongTT <= 80000000){
+            tax = (luongTT * 0.3) - 5850000;
+        }else {
+            tax = (luongTT * 0.35) - 9850000;
+        }
+        System.out.printf("\t\t%-10s %-15s %-15s %-15s \n", "Mã NV", "Tên NV", "Lương", "TTNCN");
+        System.out.printf("\t\t%-10d %-15s %-15d %-15.2f \n", employeeDAO.getBuyID(id).getId(), employeeDAO.getBuyID(id).getFullName(),employeeDAO.getBuyID(id).getSalary(), tax);
+
     }
     private static void themNV(Scanner in){
         Employee e = new Employee();
@@ -263,7 +314,6 @@ public class App {
         d.setEmail(in.nextLine());
         System.out.print("nhập phone: ");
         d.setPhone(in.nextLine());
-        d.setManagerID(null);
         departmentDAO.insert(d);
     }
     private static void suaTTPhongBan(Scanner in){
@@ -316,8 +366,14 @@ public class App {
         } catch (Exception ex) {
             System.out.println("Nhập sai định dạng!");
         }
-        employeeDAO.updatePBNull(departmentDAO.getBuyID(id).getManagerID());
-        departmentDAO.delete(id);
+        long managerID = departmentDAO.getBuyID(id).getManagerID();
+        if (managerID == 0){
+            employeeDAO.updatePBNull(id);
+            departmentDAO.delete(id);
+        } else {
+            employeeDAO.updatePBNullID(departmentDAO.getBuyID(id).getManagerID());
+            departmentDAO.delete(id);
+        }
     }
     private static void timTheoID(Scanner in){
         System.out.print("\tNhập ID phòng ban cần tìm: ");
@@ -469,6 +525,7 @@ public class App {
                                         break;
                                     case 7:
                                         // tính thuế thu nhập cá nhân
+                                        tinhthue(in);
                                         break;
                                 }
                             }

@@ -113,7 +113,6 @@ public class EmployeeDAO {
     }
     public Employee getBuyPhone(String phone){
         final String sql ="SELECT * FROM `employees` where `phone` ="+phone;
-        System.out.println(sql);
         Employee e = null;
         try {
             Connection conn = MyConnection.getConnection();
@@ -146,7 +145,6 @@ public class EmployeeDAO {
     }
     public Employee getBuyEmail(String email){
         final String sql ="SELECT * FROM `employees` where `email` ='"+email+"'";
-        System.out.println(sql);
         Employee e = null;
         try {
             Connection conn = MyConnection.getConnection();
@@ -184,7 +182,7 @@ public class EmployeeDAO {
             Connection conn = MyConnection.getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            if(rs.next()){
+            while (rs.next()){
                 Employee e = new Employee();
                 e.setId(rs.getLong("employee_id"));
                 e.setFullName(rs.getString("fullname"));
@@ -251,12 +249,34 @@ public class EmployeeDAO {
         }
     }
     public void updatePBNull( long id) {
+        /*Employee tmp = getBuyID(id);
+        if (tmp == null) {
+            throw new RuntimeException("nhân viên không tồn tại!");
+        }*/
+        final String sql = String.format("UPDATE `projectjava`.`employees` SET `department_id` = null WHERE (`department_id` = '%d')",
+              id
+        );
+        System.out.println(sql);
+        try {
+            Connection conn = MyConnection.getConnection();
+            Statement stmt = conn.createStatement();
+            long rs = stmt.executeUpdate(sql);
+            if (rs == 0) {
+                System.out.println("Cập nhật thất bại");
+            }
+            stmt.close();
+            conn.close();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void updatePBNullID( long id) {
         Employee tmp = getBuyID(id);
         if (tmp == null) {
             throw new RuntimeException("nhân viên không tồn tại!");
         }
         final String sql = String.format("UPDATE `projectjava`.`employees` SET `department_id` = null WHERE (`employee_id` = '%d')",
-              id
+                id
         );
         System.out.println(sql);
         try {
