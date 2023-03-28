@@ -371,7 +371,7 @@ public class App {
             employeeDAO.updatePBNull(id);
             departmentDAO.delete(id);
         } else {
-            employeeDAO.updatePBNullID(departmentDAO.getBuyID(id).getManagerID());
+            employeeDAO.updatePBNull(id);
             departmentDAO.delete(id);
         }
     }
