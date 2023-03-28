@@ -110,6 +110,9 @@ public class App {
         }else {
             tax = (luongTT * 0.35) - 9850000;
         }
+        if (tax <= 0){
+            tax =0;
+        }
         System.out.printf("\t\t%-10s %-15s %-15s %-15s \n", "Mã NV", "Tên NV", "Lương", "TTNCN");
         System.out.printf("\t\t%-10d %-15s %-15d %-15.2f \n", employeeDAO.getBuyID(id).getId(), employeeDAO.getBuyID(id).getFullName(),employeeDAO.getBuyID(id).getSalary(), tax);
 
