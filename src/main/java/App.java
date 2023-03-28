@@ -354,7 +354,10 @@ public class App {
         catch (Exception ex){
             System.out.println("nhập sai định dạng!");
         }
+        Employee e = new Employee();
+        e.setDepartmentID(id);
         d.setManagerID(managerid);
+        employeeDAO.updatePB(e,managerid);
         departmentDAO.updateManager(d,id);
     }
     private static void xoaPB(Scanner in){
@@ -367,13 +370,8 @@ public class App {
             System.out.println("Nhập sai định dạng!");
         }
         long managerID = departmentDAO.getBuyID(id).getManagerID();
-        if (managerID == 0){
-            employeeDAO.updatePBNull(id);
-            departmentDAO.delete(id);
-        } else {
-            employeeDAO.updatePBNull(id);
-            departmentDAO.delete(id);
-        }
+        employeeDAO.updatePBNull(id);
+        departmentDAO.delete(id);
     }
     private static void timTheoID(Scanner in){
         System.out.print("\tNhập ID phòng ban cần tìm: ");

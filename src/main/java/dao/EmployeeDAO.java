@@ -255,7 +255,7 @@ public class EmployeeDAO {
         final String sql = String.format("UPDATE `projectjava`.`employees` SET `department_id` = null WHERE (`department_id` = '%d')",
               id
         );
-        System.out.println(sql);
+        //System.out.println(sql);
         try {
             Connection conn = MyConnection.getConnection();
             Statement stmt = conn.createStatement();
@@ -277,7 +277,7 @@ public class EmployeeDAO {
         final String sql = String.format("UPDATE `projectjava`.`employees` SET `department_id` = null WHERE (`employee_id` = '%d')",
                 id
         );
-        System.out.println(sql);
+        //System.out.println(sql);
         try {
             Connection conn = MyConnection.getConnection();
             Statement stmt = conn.createStatement();
@@ -299,7 +299,7 @@ public class EmployeeDAO {
         final String sql = String.format("UPDATE `projectjava`.`employees` SET `department_id` = %d WHERE (`employee_id` = '%d')",
               e.getDepartmentID(), id
         );
-        System.out.println(sql);
+        //System.out.println(sql);
         try {
             Connection conn = MyConnection.getConnection();
             Statement stmt = conn.createStatement();
@@ -319,7 +319,7 @@ public class EmployeeDAO {
             throw new RuntimeException("nhân viên không tồn tại!");
         }
         final String sql = "DELETE FROM `employees` WHERE `employee_id` = "+id;
-        System.out.println(sql);
+        //System.out.println(sql);
         try {
             Connection conn = MyConnection.getConnection();
             Statement stmt = conn.createStatement();

@@ -144,7 +144,7 @@ public class DepartmentDAO {
         final String sql = String.format("UPDATE `projectjava`.`departments` SET `dept_name` = '%s', `email` = '%s', `phone` = '%s', `address` = '%s' WHERE (`dept_id` = '%d')",
                 d.getName(), d.getEmail(), d.getPhone(), d.getAddress(), id
         );
-        System.out.println(sql);
+        //System.out.println(sql);
         try {
             Connection conn = MyConnection.getConnection();
             Statement stmt = conn.createStatement();
@@ -206,7 +206,7 @@ public class DepartmentDAO {
             throw new RuntimeException("phòng ban không tồn tại!");
         }
         final String sql = "DELETE FROM `departments` WHERE `dept_id` = "+id;
-        System.out.println(sql);
+        //System.out.println(sql);
         try {
             Connection conn = MyConnection.getConnection();
             Statement stmt = conn.createStatement();
