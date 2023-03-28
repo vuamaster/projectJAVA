@@ -206,7 +206,7 @@ public class App {
         System.out.print("\tChọn phòng ban : ");
         int tmp = Integer.parseInt(in.nextLine());
         if (tmp == 0){
-            employeeDAO.updatePBNull(id);
+            employeeDAO.updatePBNullID(id);
         }else {
             long dept_id = departmentList.get(tmp - 1).getId();
             e.setDepartmentID(dept_id);
@@ -295,12 +295,12 @@ public class App {
             System.out.println("Nhập sai định dạng!");
         }
         List<Employee> employeeList = employeeDAO.getEmployeeinDepartment(id);
-        System.out.printf("%-10s %-15s %-10s %-20s %-10s %-15s %-15s %-10s %-15s %-10s", "Mã NV", "Tên NV","giới tính", "Email", "Số điện thoại", "Ngày thuê",
+        System.out.printf("%-10s %-15s %-10s %-20s %-15s %-15s %-15s %-10s %-15s %-10s", "Mã NV", "Tên NV","giới tính", "Email", "Số điện thoại", "Ngày thuê",
                  "lương","mã phòng","tên phòng","mã quản lý");
         System.out.println();
         for (int i = 0; i < employeeList.size(); i++) {
             Employee e = employeeList.get(i);
-            System.out.printf("%-10d %-15s %-10d %-20s %-10s %-15s %-15s %-10d %-15s %-10d \n",
+            System.out.printf("%-10d %-15s %-10d %-20s %-15s %-15s %-15s %-10d %-15s %-10d \n",
                     e.getId(),e.getFullName(),e.getGender(),e.getEmail(),e.getPhone(),e.getHireDate(),e.getSalary(),e.getDepartmentID(),e.getDeptname(),e.getManagerID());
         };
     }

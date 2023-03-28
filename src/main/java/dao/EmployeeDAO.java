@@ -234,7 +234,6 @@ public class EmployeeDAO {
         final String sql = String.format("UPDATE `projectjava`.`employees` SET `fullname` = '%s', `email` = '%s', `phone` = '%s', `address` = '%s', `hire_date` = '%s', `birth_day` = '%s', `gender` = '%d', `salary` = '%d', `postion` = '%s', `department_id` = '%d', `status` = '%d' WHERE (`employee_id` = '%d')",
                 e.getFullName(),e.getEmail(),e.getPhone(),e.getAddress(),e.getHireDate(),e.getBirthDay(),e.getGender(),e.getSalary(),e.getPostion(),e.getDepartmentID(),e.getStatus(), id
         );
-        System.out.println(sql);
         try {
             Connection conn = MyConnection.getConnection();
             Statement stmt = conn.createStatement();
@@ -249,7 +248,7 @@ public class EmployeeDAO {
         }
     }
     public void updatePBNull( long id) {
-        /*Employee tmp = getBuyID(id);
+       /* Employee tmp = getBuyID(id);
         if (tmp == null) {
             throw new RuntimeException("nhân viên không tồn tại!");
         }*/
